@@ -390,10 +390,6 @@ class Program
         Graphics memoryGraphics = Graphics.FromImage(memoryImage);
         memoryGraphics.CopyFromScreen(480, 270, 0, 0, s);//480, 270, 1440, 810, s);
 
-        
-        //string fileName = @"C:\Users\Gobbl\source\repos\Pixelfromhue";
-        //memoryImage.Save(fileName);
-
 
         Color desiredColor = new Color();
 
