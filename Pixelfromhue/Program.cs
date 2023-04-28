@@ -229,15 +229,8 @@ class Program
             if (GetAsyncKeyState(VK_CAPITAL) != 0)
             {
                 //REMEMBER TO BE IN FULLSCREEN!
-                //remove overlay
-                
-                //toggleOverlay();
-                //System.Threading.Thread.Sleep(8);
-                //process
 
                 savert();
-
-                //toggleOverlay();
             }
         }
     }
@@ -389,8 +382,6 @@ class Program
 
         Graphics memoryGraphics = Graphics.FromImage(memoryImage);
         memoryGraphics.CopyFromScreen(480, 270, 0, 0, s);//480, 270, 1440, 810, s);
-
-
         Color desiredColor = new Color();
 
         //MAGENTA COLOR 255,0,255
