@@ -47,55 +47,7 @@ class Program
         SendKeys.SendWait("{z}");
         keybd_event(VK_LMENU, 0, KEYEVENTF_KEYUP, 0);
     }
-    public static HueStruct.CIEXYZ RGBtoXYZ(int red, int green, int blue)
-    {
-        // normalize red, green, blue values
-        double rLinear = (double)red / 255.0;
-        double gLinear = (double)green / 255.0;
-        double bLinear = (double)blue / 255.0;
-
-        // convert to a sRGB form
-        double r = (rLinear > 0.04045) ? Math.Pow((rLinear + 0.055) / (
-            1 + 0.055), 2.2) : (rLinear / 12.92);
-        double g = (gLinear > 0.04045) ? Math.Pow((gLinear + 0.055) / (
-            1 + 0.055), 2.2) : (gLinear / 12.92);
-        double b = (bLinear > 0.04045) ? Math.Pow((bLinear + 0.055) / (
-            1 + 0.055), 2.2) : (bLinear / 12.92);
-
-        // converts
-        return new HueStruct.CIEXYZ(
-            (r * 0.4124 + g * 0.3576 + b * 0.1805),
-            (r * 0.2126 + g * 0.7152 + b * 0.0722),
-            (r * 0.0193 + g * 0.1192 + b * 0.9505)
-            );
-    }
-
-    /// <summary>
-    /// XYZ to L*a*b* transformation function.
-    /// </summary>
-    private static double Fxyz(double t)
-    {
-        return ((t > 0.008856) ? Math.Pow(t, (1.0 / 3.0)) : (7.787 * t + 16.0 / 116.0));
-    }
-
-    /// <summary>
-    /// Converts CIEXYZ to CIELab.
-    /// </summary>
-    public static HueStruct.CIELab XYZtoLab(HueStruct.CIEXYZ xyzL)
-    {
-        double y = xyzL.y;
-        double x = xyzL.x;
-        double z = xyzL.z;
-
-        HueStruct.CIELab lab = HueStruct.CIELab.Empty;
-
-        lab.L = 116.0 * Fxyz(y / HueStruct.CIEXYZ.D65.Y) - 16;
-        lab.A = 500.0 * (Fxyz(x / HueStruct.CIEXYZ.D65.X) - Fxyz(y / HueStruct.CIEXYZ.D65.Y));
-        lab.B = 200.0 * (Fxyz(y / HueStruct.CIEXYZ.D65.Y) - Fxyz(z / HueStruct.CIEXYZ.D65.Z));
-
-        return lab;
-    }
-
+    
     public static double deltaECalc(HueStruct.CIELab lab1, HueStruct.CIELab lab2)
     {
         //using CEI76 
@@ -139,8 +91,8 @@ class Program
                 Color currentPixelColor = memoryImage.GetPixel(x, y);
 
                 //Color currentPixelColor = Color.FromArgb(214, 118, 72);
-                HueStruct.CIEXYZ xyzK = RGBtoXYZ(currentPixelColor.R, currentPixelColor.G, currentPixelColor.B);
-                HueStruct.CIELab labK = XYZtoLab(xyzK);
+                HueStruct.CIEXYZ xyzK = HueStruct.RGBtoXYZ(currentPixelColor.R, currentPixelColor.G, currentPixelColor.B);
+                HueStruct.CIELab labK = HueStruct.XYZtoLab(xyzK);
 
                 //calculate delta E from both labs
                 double deltaE = deltaECalc(labL, labK);
@@ -190,8 +142,8 @@ class Program
 
         //MAGENTA COLOR 255,0,255
         desiredColor = Color.FromArgb(255, 0, 255);
-        HueStruct.CIEXYZ xyzL = RGBtoXYZ(255, 0, 255);
-        HueStruct.CIELab labL = XYZtoLab(xyzL);
+        HueStruct.CIEXYZ xyzL = HueStruct.RGBtoXYZ(255, 0, 255);
+        HueStruct.CIELab labL = HueStruct.XYZtoLab(xyzL);
 
         ParseScreen(memoryImage, labL);
 
