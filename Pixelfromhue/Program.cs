@@ -48,22 +48,6 @@ class Program
         keybd_event(VK_LMENU, 0, KEYEVENTF_KEYUP, 0);
     }
     
-    public static double deltaECalc(HueStruct.CIELab lab1, HueStruct.CIELab lab2)
-    {
-        //using CEI76 
-        double totalL = lab2.L - lab1.L;
-        double totala = lab2.a - lab1.a;
-        double totalb = lab2.b - lab1.b;
-
-        totalL = totalL * totalL;
-        totala = totala * totala;
-        totalb = totalb * totalb;
-
-        double totalDinkert = totalL + totala + totalb;
-        totalDinkert = Math.Sqrt(totalDinkert);
-
-        return totalDinkert;
-    }
 
     public static void LinearSmoothMove(int x, int y, int steps)
     {
@@ -95,7 +79,7 @@ class Program
                 HueStruct.CIELab labK = HueStruct.XYZtoLab(xyzK);
 
                 //calculate delta E from both labs
-                double deltaE = deltaECalc(labL, labK);
+                double deltaE = HueStruct.deltaECalc(labL, labK);
 
                 // Finally compare the pixels hex color and the desired hex color (if they match we found a pixel)
                 if (deltaE < 25)

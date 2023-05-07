@@ -8,6 +8,22 @@ namespace Pixelfromhue
 {
     public class HueStruct
     {
+        public static double deltaECalc(CIELab lab1, CIELab lab2)
+        {
+            //using CEI76 
+            double totalL = lab2.L - lab1.L;
+            double totala = lab2.a - lab1.a;
+            double totalb = lab2.b - lab1.b;
+
+            totalL = totalL * totalL;
+            totala = totala * totala;
+            totalb = totalb * totalb;
+
+            double totalDinkert = totalL + totala + totalb;
+            totalDinkert = Math.Sqrt(totalDinkert);
+
+            return totalDinkert;
+        }
         public static CIEXYZ RGBtoXYZ(int red, int green, int blue)
         {
             // normalize red, green, blue values
