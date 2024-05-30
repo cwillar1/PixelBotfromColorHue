@@ -268,8 +268,6 @@ namespace Pixelfromhue
             {
                 return L.GetHashCode() ^ a.GetHashCode() ^ b.GetHashCode();
             }
-
         }
-
     }
 }
