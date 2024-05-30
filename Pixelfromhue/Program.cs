@@ -33,7 +33,6 @@ class Program
             if (GetAsyncKeyState(VK_CAPITAL) != 0)
             {
                 //REMEMBER TO BE IN FULLSCREEN!
-
                 savert();
             }
         }
@@ -41,13 +40,12 @@ class Program
 
 
 
-    public static void toggleOverlay()
+    public static void toggleOverlay() //overwatch overlay
     {
         keybd_event(VK_LMENU, 0, 0, 0);
         SendKeys.SendWait("{z}");
         keybd_event(VK_LMENU, 0, KEYEVENTF_KEYUP, 0);
     }
-    
 
     public static void LinearSmoothMove(int x, int y, int steps)
     {
@@ -67,7 +65,7 @@ class Program
     public static void ParseScreen(Bitmap memoryImage, HueStruct.CIELab labL)
     {
 
-        for (int y = 0; y < 540; y+=10)
+        for (int y = 0; y < 540; y+=5)
         {
             for (int x = 0; x < 960; x+=3)
             {
@@ -80,11 +78,14 @@ class Program
 
                 //calculate delta E from both labs
                 double deltaE = HueStruct.deltaECalc(labL, labK);
+                Console.WriteLine(deltaE);
 
                 // Finally compare the pixels hex color and the desired hex color (if they match we found a pixel)
-                if (deltaE < 25)
+                if (deltaE < 40)
                 {
+                    Console.WriteLine("Color found");
                     LinearSmoothMove(x+480, y+270, 2);
+
                     return;
                 }
                 if (y == 539)
@@ -128,6 +129,8 @@ class Program
         desiredColor = Color.FromArgb(255, 0, 255);
         HueStruct.CIEXYZ xyzL = HueStruct.RGBtoXYZ(255, 0, 255);
         HueStruct.CIELab labL = HueStruct.XYZtoLab(xyzL);
+
+        memoryImage.Save(@"C:\Users\Gobbl\source\repos\Pixelfromhue\test.jpg");
 
         ParseScreen(memoryImage, labL);
 
